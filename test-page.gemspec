@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/test-page/version', __FILE__)
+require File.expand_path('../lib/test/page/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Jarmo Pertman"]
@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "test-page"
   gem.require_paths = ["lib"]
   gem.version       = Test::Page::VERSION
+
+  gem.add_development_dependency "rspec", "~>2.0"
 end
