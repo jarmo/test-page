@@ -16,4 +16,5 @@ Gem::Specification.new do |gem|
   gem.version       = Test::Page::VERSION
 
   gem.add_development_dependency "rspec", "~>2.0"
+  gem.add_development_dependency "simplecov"
 end
