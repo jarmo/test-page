@@ -29,7 +29,7 @@ Or install it yourself as:
 ## Usage
 
 The following example uses Watir with RSpec, but you can use whichever library
-you like.
+you like. [Check out Selenium example](https://github.com/jarmo/test-page/tree/master/examples) instead.
 
 This is the spec we are trying to run:
 
