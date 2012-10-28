@@ -104,4 +104,4 @@ There you have it, a fully functional spec using two page objects. Reference to 
 
 ## License
 
-Copyright (c) Jarmo Pertman (jarmo.p at gmail.com). See LICENSE for details.
+Copyright (c) Jarmo Pertman (jarmo.p@gmail.com). See LICENSE for details.
