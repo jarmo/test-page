@@ -102,4 +102,4 @@ API documentation for more usage information.
 
 ## License
 
-Copyright (c) Jarmo Pertman. See LICENSE for details.
+Copyright (c) Jarmo Pertman (jarmo.p at gmail.com). See LICENSE for details.
