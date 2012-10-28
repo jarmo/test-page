@@ -28,81 +28,78 @@ The following example uses Watir with RSpec, but you can use whichever library
 you like.
 
 This is the spec we are trying to run:
-````
-# spec/search_spec.rb
 
-require "test/page"
-require "watir"
-require File.expand_path("support/page/search_page", File.dirname(__FILE__))
+    # spec/search_spec.rb
 
-describe "Bing" do
-  
-  let(:browser)     { Watir::Browser.new }
-  let(:search_page) { SearchPage.new }
-  
-  before { Test::Page.browser = browser }
-  after  { browser.close }
+    require "test/page"
+    require "watir"
+    require File.expand_path("support/page/search_page", File.dirname(__FILE__))
 
-  it "finds Google" do
-    results_page = search_page.search "google"
-    results_page.should have(10).results
-    results_page.results[0].text.should =~ /google/i
-  end
+    describe "Bing" do
+      
+      let(:browser)     { Watir::Browser.new }
+      let(:search_page) { SearchPage.new }
+      
+      before { Test::Page.browser = browser }
+      after  { browser.close }
 
-  it "finds Bing itself" do
-    results_page = search_page.search "bing"
-    results_page.results.should include("Bing")
-  end
-  
-end
-````
+      it "finds Google" do
+        results_page = search_page.search "google"
+        results_page.should have(10).results
+        results_page.results[0].text.should =~ /google/i
+      end
+
+      it "finds Bing itself" do
+        results_page = search_page.search "bing"
+        results_page.results.should include("Bing")
+      end
+      
+    end
 
 Let's create the SearchPage object:
-````
-# spec/support/page/search_page.rb
 
-require File.expand_path("results_page", File.dirname(__FILE__))
+    # spec/support/page/search_page.rb
 
-class SearchPage < Test::Page
-  # Specifying the container element.
-  element { div(:id => "sbox") }
+    require File.expand_path("results_page", File.dirname(__FILE__))
 
-  # #setup is an optional method which any page might have
-  # to set the state up properly after initialization.
-  def setup
-    browser.goto "http://bing.com"
-  end
+    class SearchPage < Test::Page
+      # Specifying the container element.
+      element { browser.div(:id => "sbox") }
 
-  # #search will perform the search operation and return
-  # a ResultsPage object after it's done.
-  def search(term)
-    text_field(:id => "sb_form_q").set term
-    button(:id => "sb_form_go").click
-    redirect_to ResultsPage, browser.ul(:id => "wg0")
-  end
-end
-````
+      # #setup is an optional method which any page might have
+      # to set the state up properly after initialization.
+      def setup
+        browser.goto "http://bing.com"
+      end
+
+      # #search will perform the search operation and return
+      # a ResultsPage object after it's done.
+      def search(term)
+        text_field(:id => "sb_form_q").set term
+        button(:id => "sb_form_go").click
+        redirect_to ResultsPage, browser.ul(:id => "wg0")
+      end
+    end
 
 Let's create the ResultsPage object:
-````
-# spec/support/page/results_page.rb
 
-class ResultsPage < Test::Page
-  # #results return the LiCollection which has #include? as its additional
-  # helper method. This is done with the help of Test::Page#modify.
-  def results
-    modify lis(:class => "sa_wr").map(&:text),
-      :include? => proc do |term|
-        regexp = Regexp.new Regexp.escape(term)
-        results.any? { |result| result =~ regexp }
+    # spec/support/page/results_page.rb
+
+    class ResultsPage < Test::Page
+      # #results return the LiCollection which has #include? as its additional
+      # helper method. This is done with the help of Test::Page#modify.
+      def results
+        modify lis(:class => "sa_wr").map(&:text),
+          :include? => proc do |term|
+            regexp = Regexp.new Regexp.escape(term)
+            results.any? { |result| result =~ regexp }
+          end
       end
-  end
-end
-````
+    end
 
 There you have it, a fully functional spec using two page objects. Reference to the
 API documentation for more usage information.
 
-## Copyright
+## License
 
 Copyright (c) Jarmo Pertman. See LICENSE for details.
