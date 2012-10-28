@@ -1,5 +1,9 @@
 # Test::Page
 
+[![Build Status](https://secure.travis-ci.org/jarmo/test-page.png)](http://travis-ci.org/jarmo/test-page)
+[![Dependency Status](https://gemnasium.com/jarmo/test-page.png)](https://gemnasium.com/jarmo/test-page)
+[![Code Quality](https://codeclimate.com/badge.png)](https://codeclimate.com/github/jarmo/test-page)
+
 Test::Page helps you to write easily maintainable integration tests by implementing [Page Objects](https://code.google.com/p/selenium/wiki/PageObjects) pattern.
 
 * It is framework agnostic - you can use it with any library you want - [Watir](http://watir.com), [Selenium](http://seleniumhq.org/), [Capybara](https://github.com/jnicklas/capybara) etc.
