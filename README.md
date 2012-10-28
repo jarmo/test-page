@@ -3,7 +3,7 @@
 Test::Page helps you to write easily maintainable integration tests by implementing [Page Objects](https://code.google.com/p/selenium/wiki/PageObjects) pattern.
 
 * It is framework agnostic - you can use it with any library you want - [Watir](http://watir.com), [Selenium](http://seleniumhq.org/), [Capybara](https://github.com/jnicklas/capybara) etc.
-* It has really easy API - you can start testing right away instead of spending much time to learn new framework.
+* It has really [easy API](http://rubydoc.info/github/jarmo/test-page/frames) - you can start testing right away instead of spending much time to learn new framework.
 * It has really small codebase - even if you can't remember that easy API you can dig right into the code - it's less than 100 lines!
 
 Despite of its name you can use it with [RSpec](http://rspec.info/), [Test::Unit](http://www.ruby-doc.org/stdlib-1.9.3/libdoc/test/unit/rdoc/Test/Unit.html) or any other testing library.
@@ -96,7 +96,7 @@ Let's create the ResultsPage object:
     end
 
 There you have it, a fully functional spec using two page objects. Reference to the
-API documentation for more usage information.
+[API documentation](http://rubydoc.info/github/jarmo/test-page/frames) for more usage information.
 
 ## License
 
