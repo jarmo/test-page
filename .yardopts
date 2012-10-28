@@ -1,0 +1,6 @@
+--readme README.md
+--no-private
+--hide-void-return
+--title "Test::Page"
+--files LICENSE
+--default-return ""
