@@ -1,44 +1,40 @@
 require File.expand_path("page/version", File.dirname(__FILE__))
+require 'forwardable'
 
 module Test
   class Page
     extend Forwardable
 
-    def_delegators :container, :present?, :p
+    def_delegators :element, :present?, :p
 
     class << self
       attr_accessor :browser
-      attr_reader :setup_block, :container_block 
+      attr_reader :element_block 
 
-      def container(&block)
-        @container_block = block
-      end
-
-      def setup(&block)
-        @setup_block = block
+      def element(&block)
+        @element_block = block
       end
     end
 
     attr_writer :browser
-    attr_writer :container
 
     def browser
       @browser || parent_page_browser
     end
 
-    def container
-      if @setup_block
-        instance_eval(&@setup_block) 
-        @setup_block = nil
-      end
-      @container ||= self.class.container_block && instance_eval(&self.class.container_block)
+    def element
+      @setup_done ||= begin
+                        setup if respond_to?(:setup)
+                        true
+                      end
+      @element ||= begin
+                     element_proc = self.class.element_block
+                     element_proc && instance_eval(&element_proc)
+                   end
     end
 
-    def initialize(container=nil, &block)
-      @container = container
-      @setup_block = self.class.setup_block
-
-      block.call self if block
+    def initialize(element=nil)
+      @element = element
     end
 
     def modify(element, methodz)
@@ -56,14 +52,14 @@ module Test
       element
     end
 
-    def redirect_to(page, container=nil)
-      page.new container || self.container
+    def redirect_to(page, element=nil)
+      page.new element || self.element
     end      
 
     def method_missing(name, *args)
-      if container.respond_to?(name)
+      if element.respond_to?(name)
         self.class.send :define_method, name do |*args|
-          container.send(name, *args) {yield}
+          element.send(name, *args) {yield}
         end
         self.send(name, *args) {yield}
       else
