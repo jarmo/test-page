@@ -35,8 +35,7 @@ This is the spec we are trying to run:
     require "watir"
     require File.expand_path("support/page/search_page", File.dirname(__FILE__))
 
-    describe "Bing" do
-      
+    describe "Bing" do    
       let(:browser)     { Watir::Browser.new }
       let(:search_page) { SearchPage.new }
       
@@ -52,8 +51,7 @@ This is the spec we are trying to run:
       it "finds Bing itself" do
         results_page = search_page.search "bing"
         results_page.results.should include("Bing")
-      end
-      
+      end   
     end
 
 Let's create the SearchPage object:
