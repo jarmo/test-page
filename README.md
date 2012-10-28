@@ -37,9 +37,10 @@ This is the spec we are trying to run:
 
     require "test/page"
     require "watir"
-    require File.expand_path("support/page/search_page", File.dirname(__FILE__))
+    require File.expand_path("search_page", File.dirname(__FILE__))
 
-    describe "Bing" do    
+    describe "Bing" do
+      
       let(:browser)     { Watir::Browser.new }
       let(:search_page) { SearchPage.new }
       
@@ -49,13 +50,13 @@ This is the spec we are trying to run:
       it "finds Google" do
         results_page = search_page.search "google"
         results_page.should have(10).results
-        results_page.results[0].text.should =~ /google/i
+        results_page.results.result(1).should =~ /google/i
       end
 
       it "finds Bing itself" do
         results_page = search_page.search "bing"
         results_page.results.should include("Bing")
-      end   
+      end
     end
 
 Let's create the SearchPage object:
@@ -65,17 +66,12 @@ Let's create the SearchPage object:
     require File.expand_path("results_page", File.dirname(__FILE__))
 
     class SearchPage < Test::Page
-      # Specifying the container element.
       element { browser.div(:id => "sbox") }
 
-      # #setup is an optional method which any page might have
-      # to set the state up properly after initialization.
       def setup
         browser.goto "http://bing.com"
       end
 
-      # #search will perform the search operation and return
-      # a ResultsPage object after it's done.
       def search(term)
         text_field(:id => "sb_form_q").set term
         button(:id => "sb_form_go").click
@@ -88,14 +84,13 @@ Let's create the ResultsPage object:
     # spec/support/page/results_page.rb
 
     class ResultsPage < Test::Page
-      # #results return the LiCollection which has #include? as its additional
-      # helper method. This is done with the help of Test::Page#modify.
       def results
         modify lis(:class => "sa_wr").map(&:text),
-          :include? => proc do |term|
+          :result   => proc { |index| results[index + 1] },
+          :include? => proc { |term|
             regexp = Regexp.new Regexp.escape(term)
             results.any? { |result| result =~ regexp }
-          end
+        }
       end
     end
 
