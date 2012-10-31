@@ -6,11 +6,14 @@
 
 Test::Page helps you to write easily maintainable integration tests by implementing [Page Objects](https://code.google.com/p/selenium/wiki/PageObjects) pattern.
 
-* It is framework agnostic - you can use it with any library you want - [Watir](http://watir.com), [Selenium](http://seleniumhq.org/), [Capybara](https://github.com/jnicklas/capybara) etc.
-* It has really [easy API](http://rubydoc.info/github/jarmo/test-page/frames) - you can start testing right away instead of spending much time to learn new framework.
-* It has really small codebase - even if you can't remember that easy API you can dig right into the code - it's less than 100 lines!
+Page Objects may be objects representing whole pages like LoginPage, ProfilePage or part of the pages like LoginForm, Header etc.
 
-Despite of its name you can use it with [RSpec](http://rspec.info/), [Test::Unit](http://www.ruby-doc.org/stdlib-1.9.3/libdoc/test/unit/rdoc/Test/Unit.html) or any other testing library.
+Test::Page can be described like:
+
+* Is framework agnostic - you can use it with any library you want - [Watir](http://watir.com), [Selenium](http://seleniumhq.org/), [Capybara](https://github.com/jnicklas/capybara) etc.
+* Has really [easy API](http://rubydoc.info/github/jarmo/test-page/frames) - you can start testing right away instead of spending too much time to learn new framework.
+* Has really small codebase - even if you can't remember that small API you can dig right into the code - it's less than 100 lines!
+* Despite of its name you may use it with [RSpec](http://rspec.info/), [Test::Unit](http://www.ruby-doc.org/stdlib-1.9.3/libdoc/test/unit/rdoc/Test/Unit.html) or any other testing library.
 
 ## Installation
 
@@ -29,7 +32,9 @@ Or install it yourself as:
 ## Usage
 
 The following example uses Watir with RSpec, but you can use whichever library
-you like. [Check out Selenium example](https://github.com/jarmo/test-page/tree/master/examples) instead.
+you like.
+
+[Check out Selenium example](https://github.com/jarmo/test-page/tree/master/examples) instead, if that's your flavor of choice.
 
 This is the spec we are trying to run:
 
@@ -50,7 +55,7 @@ This is the spec we are trying to run:
       it "finds Google" do
         results_page = search_page.search "google"
         results_page.should have(10).results
-        results_page.results.result(1).should =~ /google/i
+        results_page.results[0].should =~ /google/i
       end
 
       it "finds Bing itself" do
@@ -86,7 +91,6 @@ Let's create the ResultsPage object:
     class ResultsPage < Test::Page
       def results
         modify lis(:class => "sa_wr").map(&:text),
-          :result   => proc { |index| results[index + 1] },
           :include? => proc { |term|
             regexp = Regexp.new Regexp.escape(term)
             results.any? { |result| result =~ regexp }
