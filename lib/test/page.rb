@@ -8,20 +8,20 @@ module Test
     def_delegators :element, :present?, :p
 
     class << self
-      # Set and get browser object for {Page}.
+      # Set and get the browser object for {Page}.
       #
       # This makes it possible to reuse one global browser object between
       # different {Page} objects. It will be also shared between sub-classes of {Page}
-      # classes.
+      # class.
       #
-      # @example Set Watir browser object as the browser
+      # @example Set Watir browser object as the global browser
       #   Test::Page.browser = Watir::Browser.new
       attr_accessor :browser
 
       # @private
       attr_reader :element_block 
 
-      # Sets element for the {Page} via block.
+      # Set element for the {Page} via block.
       # It will be evaluated lazily after {Page} has been instantiated.
       #
       # Element is like the container of the {Page} - everything outside of that element
@@ -51,12 +51,12 @@ module Test
       @browser || parent_page_browser
     end
 
-    # Gets the element instance.
+    # Get the element instance.
     #
     # When {#setup} is defined, it will be executed once per {Page} instance.
     #
     # @return [Object] if element is specified for {#initialize}.
-    # @return [Object] otherwise {.element} block is evaluated once per {Page} instance.
+    # @return [Object] otherwise {.element} block is evaluated once per {Page} instance and its value will be returned.
     def element
       @setup_done ||= begin
                         setup if respond_to?(:setup)
@@ -68,12 +68,12 @@ module Test
                    end
     end
 
-    # @param [Object] Element element for the {Page}. {.element} will be used if not specified.
+    # @param [Object] Element element for the {Page}. {.element} set via block will be used if not specified.
     def initialize(element=nil)
       @element = element
     end
 
-    # Add or modify element methods.
+    # Add or modify element instance methods.
     #
     # When element does not have the specified method then that method will be
     # added to the specific element instance.
@@ -122,7 +122,7 @@ module Test
       element
     end
 
-    # Convenience method for creating new {Page} object.
+    # Create new {Page} object conveniently on page actions.
     #
     # @param [Page] Page page class to make an instance of
     # @param [Object] Element optional element instance. When not specified current {Page} element will be used.
@@ -130,7 +130,8 @@ module Test
       page.new element || self.element
     end      
 
-    # Proxies every method call not found on {Page} to element.
+    # Proxies every method call not found on {Page} to element instance.
+    # Subsequent executions of the same method will be invoked on the {Page} object directly.
     def method_missing(name, *args)
       if element.respond_to?(name)
         self.class.send :define_method, name do |*args|
