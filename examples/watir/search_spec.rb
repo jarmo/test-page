@@ -13,7 +13,7 @@ describe "Bing" do
   it "finds Google" do
     results_page = search_page.search "google"
     results_page.should have(10).results
-    results_page.results.result(1).should =~ /google/i
+    results_page.results[0].should =~ /google/i
   end
 
   it "finds Bing itself" do
