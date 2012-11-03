@@ -57,6 +57,7 @@ module Test
     #
     # @return [Object] if element is specified for {#initialize}.
     # @return [Object] otherwise {.element} block is evaluated once per {Page} instance and its value will be returned.
+    # @raise [NoBrowserSetException] if {.element} has been set via block and browser has not been set.
     def element
       @setup_done ||= begin
                         setup if respond_to?(:setup)
