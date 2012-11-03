@@ -63,6 +63,17 @@ module Test
                         true
                       end
       @element ||= begin
+                     unless browser
+                       raise NoBrowserSetException.new(%q[No browser has been set to the page!
+
+    Set it to the class directly:
+      Test::Page.browser = browser_instance
+
+    Or set it to the instance of page:
+      page = MyPage.new
+      page.browser = browser_instance 
+                       ])
+                     end
                      element_proc = self.class.element_block
                      element_proc && instance_eval(&element_proc)
                    end
@@ -152,5 +163,6 @@ module Test
       page_with_browser ? page_with_browser.browser : nil
     end
       
+    NoBrowserSetException = Class.new(RuntimeError)
   end
 end

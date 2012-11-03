@@ -3,10 +3,9 @@ require File.expand_path("../../lib/test/page", File.dirname(__FILE__))
 
 describe Test::Page do
   let(:page_class) { Class.new(Test::Page) }
+  before { Test::Page.browser = nil }
 
   context ".browser" do
-    before { Test::Page.browser = nil }
-
     it "sets the browser object for page" do
       Test::Page.browser = "my browser"
       Test::Page.browser.should == "my browser"
@@ -32,6 +31,8 @@ describe Test::Page do
   end
 
   context ".element" do
+    before { page_class.browser = "foo" }
+
     it "sets the element via block" do
       page_class.element { "my element" }
       page = page_class.new
@@ -48,6 +49,7 @@ describe Test::Page do
 
   context "#element" do
     it "evaluates element provided by the block only once per instance" do
+      page_class.browser = "foo"
       block_called = false
       page_class.element do
         raise "block should have been called only once!" if block_called
@@ -57,6 +59,14 @@ describe Test::Page do
       page = page_class.new
       2.times { page.element.should == "my element in block" }
       block_called.should be_true
+    end
+
+    it "raises an exception if browser is not set" do
+      page_class.element { "whatever" }
+
+      expect {
+        page_class.new.element
+      }.to raise_error(Test::Page::NoBrowserSetException)
     end
   end
 
@@ -121,6 +131,7 @@ describe Test::Page do
     it "returns the new page instance" do
       second_page = Class.new(Test::Page)
       page_class.send(:define_method, :redirect_me) { redirect_to second_page }
+      page_class.browser = "foo"
       page = page_class.new
       page.redirect_me.should be_an_instance_of(second_page)
     end
@@ -128,6 +139,7 @@ describe Test::Page do
     it "reuses the existing page element" do
       second_page = Class.new(Test::Page)
       page_class.send(:define_method, :redirect_me) { redirect_to second_page }
+      page_class.browser = "foo"
       page = page_class.new "provided element"
       redirected_page = page.redirect_me
       redirected_page.element.should == "provided element"
