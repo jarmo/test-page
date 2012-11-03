@@ -135,9 +135,14 @@ module Test
     # Proxies every method call not found on {Page} to element instance.
     # Subsequent executions of the same method will be invoked on the {Page} object directly.
     def method_missing(name, *args)
-      if element.respond_to?(name)
+      begin
+        el = element
+      rescue SystemStackError
+        raise_invalid_element_definition
+      end
+      if el.respond_to?(name)
         self.class.send :define_method, name do |*args|
-          element.send(name, *args) {yield}
+          el.send(name, *args) {yield}
         end
         self.send(name, *args) {yield}
       else
@@ -155,17 +160,29 @@ module Test
     end
 
     def raise_no_browser_set_exception
-      raise NoBrowserSetException.new(%q[No browser has been set to the page!
+      raise NoBrowserSetException.new %q[No browser has been set to the page!
 
 Set it to the class directly:
   Test::Page.browser = browser_instance
 
 Or set it to the instance of page:
   page = MyPage.new
-  page.browser = browser_instance 
-      ])
+  page.browser = browser_instance]
+    end
+
+    def raise_invalid_element_definition
+      raise InvalidElementDefinition.new %q[Element defined via block cannot be evaluated, because it is causing SystemStackError.
+
+This is usually caused by the fact that the browser instance is not used to search that element.
+
+For example, this is not a correct way to define an element:
+  element { div(:id => "something") }
+
+Correct way would be like this:
+  element { browser.div(:id => "something") }]
     end
 
     NoBrowserSetException = Class.new(RuntimeError)
+    InvalidElementDefinition = Class.new(RuntimeError)
   end
 end

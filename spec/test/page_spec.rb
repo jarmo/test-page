@@ -68,6 +68,15 @@ describe Test::Page do
         page_class.new.element
       }.to raise_error(Test::Page::NoBrowserSetException)
     end
+
+    it "raises an exception if element is set via block without using browser" do
+      page_class.element { foo_bar }
+      page_class.browser = "foo"
+
+      expect {
+        page_class.new.element
+      }.to raise_error(Test::Page::InvalidElementDefinition)
+    end
   end
 
   context "#setup" do
