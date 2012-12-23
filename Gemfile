@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
 gemspec
-gem 'coveralls', require: false, platform: ruby_19
+gem 'coveralls', require: false, platform: :ruby_19
