@@ -2,3 +2,11 @@ rvm:
  - 1.8.7
  - 1.9.2
  - 1.9.3
+ - ruby-head
+notifications:
+  recipients:
+    - jarmo.p@gmail.com
+matrix:
+  allow_failures:
+    - rvm: ruby-head
+
