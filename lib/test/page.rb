@@ -136,13 +136,14 @@ module Test
     # Subsequent executions of the same method will be invoked on the {Page} object directly.
     def method_missing(name, *args)
       begin
-        el = element
+        element
       rescue SystemStackError
         raise_invalid_element_definition
       end
-      if el.respond_to?(name)
+
+      if element.respond_to?(name)
         self.class.send :define_method, name do |*args|
-          el.send(name, *args) {yield}
+          element.send(name, *args) {yield}
         end
         self.send(name, *args) {yield}
       else

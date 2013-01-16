@@ -178,6 +178,21 @@ describe Test::Page do
       page.should respond_to(:size)
     end
 
+    it "defined methods to the page class will invoke methods on new element instance too" do
+      page = page_class.new "element"
+      page.size
+      el = page.element
+      el.instance_eval do
+        singleton = class << self; self end
+        singleton.send(:define_method, :size) { raise "not expected to call this!" }
+      end
+
+      page.instance_variable_set :@element, "new element"
+      expect {
+        page.size
+      }.not_to raise_error
+    end
+
     it "will raise a NoMethodError if no method is found on element" do
       expect { page_class.new("element").foo }.to raise_error(NoMethodError)
     end
