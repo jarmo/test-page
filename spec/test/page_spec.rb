@@ -145,15 +145,6 @@ describe Test::Page do
       page.redirect_me.should be_an_instance_of(second_page)
     end
 
-    it "reuses the existing page element" do
-      second_page = Class.new(Test::Page)
-      page_class.send(:define_method, :redirect_me) { redirect_to second_page }
-      page_class.browser = "foo"
-      page = page_class.new "provided element"
-      redirected_page = page.redirect_me
-      redirected_page.element.should == "provided element"
-    end
-
     it "is possible to specify new element" do
       second_page = Class.new(Test::Page)
       page_class.send(:define_method, :redirect_me) { redirect_to second_page, "new element" }

@@ -127,9 +127,9 @@ module Test
     # Create new {Page} object conveniently on page actions.
     #
     # @param [Page] Page page class to make an instance of
-    # @param [Object] Element optional element instance. When not specified current {Page} element will be used.
+    # @param [Object] Element optional element instance to use as a container.
     def redirect_to(page, element=nil)
-      page.new element || self.element
+      page.new element
     end      
 
     # Proxies every method call not found on {Page} to element instance.
