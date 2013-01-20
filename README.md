@@ -38,66 +38,66 @@ you like.
 [Check out Selenium example](https://github.com/jarmo/test-page/tree/master/examples) instead, if that's your flavor of choice.
 
 This is the spec we are trying to run:
+````ruby
+# spec/search_spec.rb
+require "test/page"
+require "watir"
+require File.expand_path("search_page", File.dirname(__FILE__))
 
-    # spec/search_spec.rb
-
-    require "test/page"
-    require "watir"
-    require File.expand_path("search_page", File.dirname(__FILE__))
-
-    describe "Bing" do
+describe "Bing" do
       
-      let(:browser)     { Watir::Browser.new }
-      let(:search_page) { SearchPage.new }
+  let(:browser)     { Watir::Browser.new }
+  let(:search_page) { SearchPage.new }
       
-      before { Test::Page.browser = browser }
-      after  { browser.close }
+  before { Test::Page.browser = browser }
+  after  { browser.close }
 
-      it "finds Google" do
-        results_page = search_page.search "google"
-        results_page.should have(10).results
-        results_page.results[0].should =~ /google/i
-      end
+  it "finds Google" do
+    results_page = search_page.search "google"
+    results_page.should have(10).results
+    results_page.results[0].should =~ /google/i
+  end
 
-      it "finds Bing itself" do
-        results_page = search_page.search "bing"
-        results_page.results.should include("Bing")
-      end
-    end
+  it "finds Bing itself" do
+    results_page = search_page.search "bing"
+    results_page.results.should include("Bing")
+  end
+end
+````
 
 Let's create the SearchPage object:
+````ruby
+# spec/support/page/search_page.rb
+require File.expand_path("results_page", File.dirname(__FILE__))
 
-    # spec/support/page/search_page.rb
+class SearchPage < Test::Page
+  element { browser.div(:id => "sbox") }
 
-    require File.expand_path("results_page", File.dirname(__FILE__))
+  def setup
+    browser.goto "http://bing.com"
+  end
 
-    class SearchPage < Test::Page
-      element { browser.div(:id => "sbox") }
-
-      def setup
-        browser.goto "http://bing.com"
-      end
-
-      def search(term)
-        text_field(:id => "sb_form_q").set term
-        button(:id => "sb_form_go").click
-        redirect_to ResultsPage, browser.ul(:id => "wg0")
-      end
-    end
+  def search(term)
+    text_field(:id => "sb_form_q").set term
+    button(:id => "sb_form_go").click
+    redirect_to ResultsPage, browser.ul(:id => "wg0")
+  end
+end
+````
 
 Let's create the ResultsPage object:
-
-    # spec/support/page/results_page.rb
-
-    class ResultsPage < Test::Page
-      def results
-        modify lis(:class => "sa_wr").map(&:text),
-          :include? => proc { |term|
-            regexp = Regexp.new Regexp.escape(term)
-            results.any? { |result| result =~ regexp }
-        }
-      end
-    end
+````ruby
+# spec/support/page/results_page.rb
+class ResultsPage < Test::Page
+  def results
+    modify lis(:class => "sa_wr").map(&:text),
+      :include? => proc { |term|
+        regexp = Regexp.new Regexp.escape(term)
+        results.any? { |result| result =~ regexp }
+      }
+  end
+end
+````
 
 There you have it, a fully functional spec using two page objects. Reference to the
 [API documentation](http://rubydoc.info/github/jarmo/test-page/frames) for more usage information.
