@@ -18,6 +18,6 @@ describe "Bing" do
 
   it "finds Bing itself" do
     results_page = search_page.search "bing"
-    results_page.results.should include("Bing")
+    results_page.results.should be_any { |result| result =~ /Bing/ }
   end
 end

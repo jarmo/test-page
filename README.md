@@ -38,7 +38,7 @@ you like.
 [Check out Selenium example](https://github.com/jarmo/test-page/tree/master/examples) instead, if that's your flavor of choice.
 
 This is the spec we are trying to run:
-````ruby
+```ruby
 # spec/search_spec.rb
 require "test/page"
 require "watir"
@@ -60,13 +60,13 @@ describe "Bing" do
 
   it "finds Bing itself" do
     results_page = search_page.search "bing"
-    results_page.results.should include("Bing")
+    results_page.results.should be_any { |result| result =~ /Bing/ }
   end
 end
-````
+```
 
 Let's create the SearchPage object:
-````ruby
+```ruby
 # spec/support/page/search_page.rb
 require File.expand_path("results_page", File.dirname(__FILE__))
 
@@ -83,21 +83,17 @@ class SearchPage < Test::Page
     redirect_to ResultsPage, browser.ul(:id => "wg0")
   end
 end
-````
+```
 
 Let's create the ResultsPage object:
-````ruby
+```ruby
 # spec/support/page/results_page.rb
 class ResultsPage < Test::Page
   def results
-    modify lis(:class => "sa_wr").map(&:text),
-      :include? => proc { |term|
-        regexp = Regexp.new Regexp.escape(term)
-        results.any? { |result| result =~ regexp }
-      }
+    lis(:class => "sa_wr").map(&:text)
   end
 end
-````
+```
 
 There you have it, a fully functional spec using two page objects. Reference to the
 [API documentation](http://rubydoc.info/github/jarmo/test-page/frames) for more usage information.

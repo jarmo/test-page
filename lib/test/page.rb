@@ -75,55 +75,6 @@ module Test
       @element = element
     end
 
-    # Add or modify element instance methods.
-    #
-    # When element does not have the specified method then that method will be
-    # added to the specific element instance.
-    # When element has specified method it will be invoked before invoking the
-    # specified method.
-    #
-    # @example Add #png? method to Watir::Image
-    #   class Gallery < Test::Page
-    #     def thumbnail
-    #       image = img(:id => "thumbnail")
-    #       modify image,
-    #         :png? => proc { File.extname(image.src).downcase == ".png" }
-    #     end
-    #   end
-    #
-    #   Gallery.new.thumbnail.png? # returns true for images, which have
-    #                              # the src attribute set to png.
-    #
-    # @example Modify Watir::Button#click to return new MainPage instance after click
-    #   class LoginForm < Test::Page
-    #     def login_button
-    #       modify button(:id => "login"),
-    #         :click => proc { redirect_to MainPage }
-    #     end
-    #   end
-    #
-    #   LoginForm.new.login_button.click # performs the click and returns
-    #                                    # a new MainPage instance.
-    #
-    # @param [Object] Element element to modify.
-    # @param [Hash<Symbol,Proc>] Hash of method name as a Symbol and body as a Proc pairs.
-    #
-    # @return [Object] Modified Element instance.
-    def modify(element, methods)
-      methods.each_pair do |meth, return_value|
-        element.instance_eval do 
-          singleton = class << self; self end
-
-          singleton.send :alias_method, "__#{meth}", meth if respond_to? meth
-          singleton.send :define_method, meth do |*args|
-            self.send("__#{meth}", *args) if respond_to? "__#{meth}"
-            return_value.call(*args)
-          end
-        end
-      end
-      element
-    end
-
     # Create new {Page} object conveniently on page actions.
     #
     # @param [Page] Page page class to make an instance of

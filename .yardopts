@@ -2,5 +2,5 @@
 --no-private
 --hide-void-return
 --title "Test::Page"
---files LICENSE
+--files LICENSE,CHANGES.md
 --default-return ""

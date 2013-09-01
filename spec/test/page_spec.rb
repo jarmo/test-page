@@ -93,49 +93,6 @@ describe Test::Page do
     end
   end
 
-  context "#modify" do
-    let(:modified_page_class) do
-      page_class.send :define_method, :something do
-        modify Hash.new,
-          :action => proc { "hi" },
-          :store => proc { |a, b| a + b }
-      end      
-      page_class
-    end
-
-    it "returns the instance of the original object" do
-      page = modified_page_class.new
-      page.something.should == {}
-    end
-
-    it "allows to modify default behavior of the instance's methods" do
-      page = modified_page_class.new
-      page.something.store(1, 2).should == 3
-    end
-
-    it "executes the original instance method too" do
-      page = modified_page_class.new
-      result = page.something
-      result.store 1, 2
-      result.should == {1 => 2}
-    end
-
-    it "modifies only singleton instance methods, leaving original class intact" do
-      page = modified_page_class.new
-      result = page.something
-      result.store(1, 2).should == 3
-
-      original_hash = Hash.new
-      original_hash.store(1, 2).should == 2
-      original_hash.should == {1 => 2}
-    end
-
-    it "allows to add new methods too" do
-      page = modified_page_class.new
-      page.something.action.should == "hi"
-    end
-  end
-
   context "#redirect_to" do
     it "returns the new page instance" do
       second_page = Class.new(Test::Page)
