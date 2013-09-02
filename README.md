@@ -1,15 +1,15 @@
-# Test::Page
+# test-page
 [![Gem Version](https://badge.fury.io/rb/test-page.png)](http://badge.fury.io/rb/test-page)
 [![Build Status](https://secure.travis-ci.org/jarmo/test-page.png)](http://travis-ci.org/jarmo/test-page)
 [![Coverage](https://coveralls.io/repos/jarmo/test-page/badge.png?branch=master)](https://coveralls.io/r/jarmo/test-page)
 [![Dependency Status](https://gemnasium.com/jarmo/test-page.png)](https://gemnasium.com/jarmo/test-page)
 [![Code Climate](https://codeclimate.com/github/jarmo/test-page.png)](https://codeclimate.com/github/jarmo/test-page)
 
-Test::Page helps you to write easily maintainable integration tests by implementing [Page Objects](https://code.google.com/p/selenium/wiki/PageObjects) pattern.
+test-page helps you to write easily maintainable integration tests by implementing [Page Objects](https://code.google.com/p/selenium/wiki/PageObjects) pattern.
 
 Page Objects may be objects representing whole pages like LoginPage, ProfilePage or part of the pages like LoginForm, Header etc.
 
-Test::Page can be described like:
+test-page can be described like:
 
 * Is framework agnostic - you can use it with any library you want - [Watir](http://watir.com), [Selenium](http://seleniumhq.org/), [Capybara](https://github.com/jnicklas/capybara) etc.
 * Has really [easy API](http://rubydoc.info/github/jarmo/test-page/frames) - you can start testing right away instead of spending too much time to learn new framework.
