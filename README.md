@@ -1,6 +1,6 @@
 # test-page
 [![Gem Version](https://badge.fury.io/rb/test-page.png)](http://badge.fury.io/rb/test-page)
-[![Build Status](https://secure.travis-ci.org/jarmo/test-page.png)](http://travis-ci.org/jarmo/test-page)
+[![Build Status](https://api.travis-ci.org/jarmo/test-page.png)](http://travis-ci.org/jarmo/test-page)
 [![Coverage](https://coveralls.io/repos/jarmo/test-page/badge.png?branch=master)](https://coveralls.io/r/jarmo/test-page)
 [![Dependency Status](https://gemnasium.com/jarmo/test-page.png)](https://gemnasium.com/jarmo/test-page)
 [![Code Climate](https://codeclimate.com/github/jarmo/test-page.png)](https://codeclimate.com/github/jarmo/test-page)
