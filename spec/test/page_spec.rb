@@ -8,25 +8,25 @@ describe Test::Page do
   context ".browser" do
     it "sets the browser object for page" do
       Test::Page.browser = "my browser"
-      Test::Page.browser.should == "my browser"
+      expect(Test::Page.browser).to eq("my browser")
     end
 
     it "does not set the browser object for sub-page class" do
       Test::Page.browser = "your browser"
-      page_class.browser.should be_nil
+      expect(page_class.browser).to be_nil
     end
 
     it "sets the browser object for sub-page instances" do
       Test::Page.browser = "your browser"
       page = page_class.new
-      page.browser.should == "your browser"
+      expect(page.browser).to eq("your browser")
     end
 
     it "can be overridden by sub-page" do
       Test::Page.browser = "their browser"
       page_class.browser = "my page browser"
-      page_class.browser.should == "my page browser"
-      Test::Page.browser.should == "their browser"
+      expect(page_class.browser).to eq("my page browser")
+      expect(Test::Page.browser).to eq("their browser")
     end
   end
 
@@ -36,14 +36,14 @@ describe Test::Page do
     it "sets the element via block" do
       page_class.element { "my element" }
       page = page_class.new
-      page.element.should == "my element"
+      expect(page.element).to eq("my element")
     end
   end
 
   context "#initialize" do
     it "allows to set element" do
       page = page_class.new "my special element"
-      page.element.should == "my special element"
+      expect(page.element).to eq("my special element")
     end
   end
 
@@ -57,8 +57,8 @@ describe Test::Page do
         "my element in block"
       end
       page = page_class.new
-      2.times { page.element.should == "my element in block" }
-      block_called.should be_true
+      2.times { expect(page.element).to eq("my element in block") }
+      expect(block_called).to be_truthy
     end
 
     it "raises an exception if browser is not set" do
@@ -88,8 +88,8 @@ describe Test::Page do
         @element = "element via setup"
       end
       page = page_class.new
-      2.times { page.element.should == "element via setup" }
-      block_called.should be_true
+      2.times { expect(page.element).to eq("element via setup") }
+      expect(block_called).to be_truthy
     end
   end
 
@@ -99,7 +99,7 @@ describe Test::Page do
       page_class.send(:define_method, :redirect_me) { redirect_to second_page }
       page_class.browser = "foo"
       page = page_class.new
-      page.redirect_me.should be_an_instance_of(second_page)
+      expect(page.redirect_me).to be_an_instance_of(second_page)
     end
 
     it "is possible to specify new element" do
@@ -107,7 +107,7 @@ describe Test::Page do
       page_class.send(:define_method, :redirect_me) { redirect_to second_page, "new element" }
       page = page_class.new "provided element"
       redirected_page = page.redirect_me
-      redirected_page.element.should == "new element"
+      expect(redirected_page.element).to eq("new element")
     end
 
   end  
@@ -115,15 +115,15 @@ describe Test::Page do
   context "#method_missing" do
     it "calls all missing methods on element object" do
       page = page_class.new "element"
-      page.should_not respond_to(:size)
-      page.size.should == "element".size
+      expect(page).not_to respond_to(:size)
+      expect(page.size).to eq("element".size)
     end
 
     it "defines methods to the page class" do
       page = page_class.new "element"
-      page.should_not respond_to(:size)
+      expect(page).not_to respond_to(:size)
       page.size
-      page.should respond_to(:size)
+      expect(page).to respond_to(:size)
     end
 
     it "defined methods to the page class will invoke methods on new element instance too" do
