@@ -3,7 +3,7 @@ require File.expand_path('../lib/test/page/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Jarmo Pertman"]
-  gem.email         = ["jarmo.p@gmail.com"]
+  gem.email         = ["jarmo@jarmopertman.com"]
   gem.description   = %q{test-page helps you to write easily maintainable integration tests by using Watir, Selenium or any other testing library.}
   gem.summary       = %q{test-page helps you to write easily maintainable integration tests by using Watir, Selenium or any other testing library.}
   gem.homepage      = "https://github.com/jarmo/test-page"
